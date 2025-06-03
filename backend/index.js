@@ -1,6 +1,4 @@
 require('dotenv').config();
-// This is the entry point for the backend server
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -67,7 +65,6 @@ const connectWithRetry = () => {
     })
     .then(() => {
         console.log('Successfully connected to MongoDB Atlas');
-        // Start server only after successful database connection
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
