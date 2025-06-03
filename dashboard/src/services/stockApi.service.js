@@ -1,218 +1,65 @@
 import axios from 'axios';
 
-const API_KEY = 'E2ENLEdIqTZwg9ircBeBI2yQNCuFxIAw';
-const BASE_URL = 'https://fcsapi.com/api-v3/stock';
+const FINNHUB_API_KEY = 'YOUR_FINNHUB_API_KEY';
+const finnhub = require('finnhub');
 
-// Create axios instance with common config
-const api = axios.create({
-    baseURL: BASE_URL,
-    params: {
-        access_key: API_KEY
-    }
-});
-
-// Add response interceptor for rate limiting
-api.interceptors.response.use(
-    response => response,
-    error => {
-        if (error.response?.status === 429) {
-            // Rate limit exceeded - wait and retry
-            const retryAfter = error.response.headers['retry-after'] || 60;
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    resolve(api(error.config));
-                }, retryAfter * 1000);
-            });
-        }
-        return Promise.reject(error);
-    }
-);
-
-// Error handler with detailed messages
-const handleError = (error) => {
-    let errorMessage = 'An error occurred';
-    
-    if (error.response) {
-        const responseData = error.response.data;
-        errorMessage = responseData.msg || responseData.message || responseData.error || 'Server error';
-        console.error('Stock API Error:', {
-            message: errorMessage,
-            status: error.response.status,
-            endpoint: error.config?.url,
-            data: responseData
-        });
-    } else if (error.request) {
-        errorMessage = 'Network error. Please check your connection.';
-        console.error('Stock API Network Error:', error.request);
-    } else {
-        console.error('Stock API Error:', error.message);
-    }
-    
-    throw new Error(errorMessage);
-};
-
-// Mock data for development/fallback
-const mockData = {
-    performance: {
-        response: [
-            {
-                symbol: 'AAPL',
-                daily: '0.5',
-                week: '2.3',
-                month: '5.7',
-                ytd: '15.2',
-                year: '25.8'
-            },
-            // Add mock data for other stocks...
-        ]
-    },
-    // Add other mock data as needed...
-};
+const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+api_key.apiKey = FINNHUB_API_KEY;
+const finnhubClient = new finnhub.DefaultApi();
 
 const stockApiService = {
-    // Get latest prices for multiple stocks
     getLatestPrices: async (symbols) => {
         try {
-            const response = await api.get('/latest', {
-                params: { symbol: symbols.join(',') }
-            });
-            return response.data;
+            const promises = symbols.map(symbol => 
+                new Promise((resolve) => {
+                    finnhubClient.quote(symbol, (error, data) => {
+                        resolve({ symbol, data, error });
+                    });
+                })
+            );
+            
+            const results = await Promise.all(promises);
+            return results.map(result => ({
+                s: result.symbol,
+                c: result.data?.c || 0,
+                h: result.data?.h || 0,
+                l: result.data?.l || 0,
+                o: result.data?.o || 0,
+                pc: result.data?.pc || 0,
+                ch: ((result.data?.c - result.data?.pc) || 0).toFixed(2),
+                cp: (((result.data?.c - result.data?.pc) / result.data?.pc * 100) || 0).toFixed(2)
+            }));
         } catch (error) {
-            handleError(error);
+            console.error('Error fetching stock prices:', error);
+            return [];
         }
     },
 
-    // Get stock profile information
-    getStockProfiles: async (symbols) => {
+    getStockProfile: async (symbol) => {
         try {
-            const response = await api.get('/profile', {
-                params: { symbol: symbols.join(',') }
-            });
-            return response.data;
-        } catch (error) {
-            handleError(error);
-        }
-    },
-
-    // Get historical data with date range
-    getHistoricalData: async (symbol, period = '1d', from, to) => {
-        try {
-            const response = await api.get('/history', {
-                params: {
-                    symbol,
-                    period,
-                    from,
-                    to,
-                    level: 1 // Include OHLCV data
-                }
-            });
-            return response.data;
-        } catch (error) {
-            handleError(error);
-        }
-    },
-
-    // Get market performance metrics
-    getPerformance: async (symbols) => {
-        try {
-            // First try the API call
-            try {
-                const response = await api.get('/performance', {
-                    params: { 
-                        symbol: symbols.join(',')
-                    }
+            return new Promise((resolve) => {
+                finnhubClient.companyProfile2({ 'symbol': symbol }, (error, data) => {
+                    resolve(data);
                 });
-                return response.data;
-            } catch (error) {
-                // If API fails, use mock data for development
-                console.warn('Using mock performance data due to API error:', error.message);
-                return mockData.performance;
-            }
-        } catch (error) {
-            handleError(error);
-        }
-    },
-
-    // Get technical indicators with customizable parameters
-    getTechnicalIndicators: async (symbol, period = '1d') => {
-        try {
-            const response = await api.get('/indicators', {
-                params: { 
-                    symbol, 
-                    period,
-                    indicators: ['sma', 'ema', 'rsi', 'macd', 'bb'].join(',')
-                }
             });
-            return response.data;
         } catch (error) {
-            handleError(error);
+            console.error('Error fetching stock profile:', error);
+            return null;
         }
     },
 
-    // Get market trends and signals
-    getMarketTrends: async (symbols) => {
+    getHistoricalData: async (symbol, resolution = 'D', from, to) => {
         try {
-            const response = await api.get('/technicals', {
-                params: { 
-                    symbol: symbols,
-                    type: ['trend', 'signal'].join(',')
-                }
+            return new Promise((resolve) => {
+                finnhubClient.stockCandles(symbol, resolution, from, to, (error, data) => {
+                    resolve(data);
+                });
             });
-            return response.data;
         } catch (error) {
-            handleError(error);
-        }
-    },
-
-    // Get fundamental data
-    getFundamental: async (symbols) => {
-        try {
-            const response = await api.get('/fundamental', {
-                params: { 
-                    symbol: symbols.join(','),
-                    type: ['overview', 'ratios', 'growth'].join(',')
-                }
-            });
-            return response.data;
-        } catch (error) {
-            handleError(error);
-        }
-    },
-
-    // Get stock list by country with filters
-    getStockList: async (country = 'united-states', filters = {}) => {
-        try {
-            const response = await api.get('/list', {
-                params: {
-                    country,
-                    ...filters
-                }
-            });
-            return response.data;
-        } catch (error) {
-            handleError(error);
-        }
-    },
-
-    // Get comprehensive financial data
-    getFinancialData: async (symbol) => {
-        try {
-            const [income, balance, cashFlow, metrics] = await Promise.all([
-                api.get('/income', { params: { symbol } }),
-                api.get('/balance', { params: { symbol } }),
-                api.get('/cash', { params: { symbol } }),
-                api.get('/metrics', { params: { symbol } })
-            ]);
-            return {
-                income: income.data,
-                balance: balance.data,
-                cashFlow: cashFlow.data,
-                metrics: metrics.data
-            };
-        } catch (error) {
-            handleError(error);
+            console.error('Error fetching historical data:', error);
+            return null;
         }
     }
 };
 
-export default stockApiService; 
+export default stockApiService;
