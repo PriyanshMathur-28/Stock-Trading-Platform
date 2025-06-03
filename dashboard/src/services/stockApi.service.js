@@ -1,7 +1,7 @@
 import axios from 'axios';
+import finnhub from 'finnhub';
 
-const FINNHUB_API_KEY = 'YOUR_FINNHUB_API_KEY';
-const finnhub = require('finnhub');
+const FINNHUB_API_KEY = import.meta.env.VITE_FINNHUB_API_KEY;
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = FINNHUB_API_KEY;
@@ -58,6 +58,32 @@ const stockApiService = {
         } catch (error) {
             console.error('Error fetching historical data:', error);
             return null;
+        }
+    },
+
+    getMarketNews: async () => {
+        try {
+            return new Promise((resolve) => {
+                finnhubClient.marketNews("general", {}, (error, data) => {
+                    resolve(data);
+                });
+            });
+        } catch (error) {
+            console.error('Error fetching market news:', error);
+            return [];
+        }
+    },
+
+    getCompanyNews: async (symbol, from, to) => {
+        try {
+            return new Promise((resolve) => {
+                finnhubClient.companyNews(symbol, from, to, (error, data) => {
+                    resolve(data);
+                });
+            });
+        } catch (error) {
+            console.error('Error fetching company news:', error);
+            return [];
         }
     }
 };

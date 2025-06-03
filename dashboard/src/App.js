@@ -5,7 +5,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import './App.css';
 
-const clerkPubKey = 'YOUR_CLERK_PUBLISHABLE_KEY';
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 function App() {
   return (
