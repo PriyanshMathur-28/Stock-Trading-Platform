@@ -4,8 +4,8 @@ import stockApiService from '../services/stockApi.service';
 const StockContext = createContext();
 
 // Default stocks to track
-const DEFAULT_STOCKS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META'];
-const UPDATE_INTERVAL = 5400000; // 1.5 hours in milliseconds
+const DEFAULT_STOCKS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'JNJ'];
+const UPDATE_INTERVAL = 300000; // 5 minutes in milliseconds
 
 export const StockProvider = ({ children }) => {
     const [stockData, setStockData] = useState({
@@ -17,44 +17,50 @@ export const StockProvider = ({ children }) => {
         financials: [],
         historicalData: {},
         marketTrends: [],
+        marketNews: [],
         loading: true,
         error: null,
         lastUpdated: null
     });
 
-    const [watchlist, setWatchlist] = useState(DEFAULT_STOCKS);
+    const [watchlist, setWatchlist] = useState(() => {
+        const saved = localStorage.getItem('watchlist');
+        return saved ? JSON.parse(saved) : DEFAULT_STOCKS;
+    });
+
+    // Save watchlist to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    }, [watchlist]);
 
     // Fetch all stock data
     const fetchAllStockData = async () => {
         try {
             setStockData(prev => ({ ...prev, loading: true, error: null }));
 
+            console.log('Fetching stock data for:', watchlist);
+
             const [
                 prices, 
                 profiles, 
                 performance,
                 fundamentals,
-                marketTrends
+                marketTrends,
+                marketNews
             ] = await Promise.all([
                 stockApiService.getLatestPrices(watchlist),
                 stockApiService.getStockProfiles(watchlist),
                 stockApiService.getPerformance(watchlist),
                 stockApiService.getFundamental(watchlist),
-                stockApiService.getMarketTrends(watchlist.join(','))
+                stockApiService.getMarketTrends(watchlist.join(',')),
+                stockApiService.getMarketNews()
             ]);
 
-            // Fetch technical indicators and financial data for each stock
+            // Fetch technical indicators for each stock
             const technicalPromises = watchlist.map(symbol => 
                 stockApiService.getTechnicalIndicators(symbol)
             );
-            const financialPromises = watchlist.map(symbol =>
-                stockApiService.getFinancialData(symbol)
-            );
-
-            const [technical, financials] = await Promise.all([
-                Promise.all(technicalPromises),
-                Promise.all(financialPromises)
-            ]);
+            const technical = await Promise.all(technicalPromises);
 
             // Get historical data for charts (last 6 months)
             const sixMonthsAgo = new Date();
@@ -63,13 +69,13 @@ export const StockProvider = ({ children }) => {
             const toDate = new Date().toISOString().split('T')[0];
 
             const historicalPromises = watchlist.map(symbol =>
-                stockApiService.getHistoricalData(symbol, '1d', fromDate, toDate)
+                stockApiService.getHistoricalData(symbol, 'D', fromDate, toDate)
             );
             const historical = await Promise.all(historicalPromises);
 
             const historicalData = {};
             watchlist.forEach((symbol, index) => {
-                historicalData[symbol] = historical[index].response || {};
+                historicalData[symbol] = historical[index].response || [];
             });
 
             setStockData({
@@ -78,14 +84,18 @@ export const StockProvider = ({ children }) => {
                 performance: performance.response || [],
                 technicalIndicators: technical.map(t => t.response) || [],
                 fundamentals: fundamentals.response || [],
-                financials: financials || [],
+                financials: [],
                 historicalData,
                 marketTrends: marketTrends.response || [],
+                marketNews: marketNews || [],
                 loading: false,
                 error: null,
                 lastUpdated: new Date().toISOString()
             });
+
+            console.log('Stock data updated successfully');
         } catch (error) {
+            console.error('Error fetching stock data:', error);
             setStockData(prev => ({
                 ...prev,
                 loading: false,
@@ -96,8 +106,9 @@ export const StockProvider = ({ children }) => {
 
     // Add stock to watchlist
     const addToWatchlist = (symbol) => {
-        if (!watchlist.includes(symbol)) {
-            setWatchlist([...watchlist, symbol]);
+        const upperSymbol = symbol.toUpperCase();
+        if (!watchlist.includes(upperSymbol)) {
+            setWatchlist([...watchlist, upperSymbol]);
         }
     };
 
@@ -150,4 +161,4 @@ export const useStock = () => {
     return context;
 };
 
-export default StockContext; 
+export default StockContext;

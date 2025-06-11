@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import authService from '../../services/auth.service';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Signup.css';
 
 function Signup() {
     const navigate = useNavigate();
+    const { signup } = useAuth();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -33,17 +34,16 @@ function Signup() {
             return;
         }
 
-        try {
-            const response = await authService.signup(
-                formData.username,
-                formData.email,
-                formData.password
-            );
+        if (formData.password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            setLoading(false);
+            return;
+        }
 
-            if (response.success) {
-                // Redirect to dashboard
-                window.location.href = 'http://localhost:3001';
-            }
+        try {
+            await signup(formData.username, formData.email, formData.password);
+            // Redirect to dashboard
+            window.location.href = 'http://localhost:3001';
         } catch (err) {
             setError(err.message || 'An error occurred during signup');
         } finally {
@@ -66,6 +66,7 @@ function Signup() {
                             onChange={handleChange}
                             required
                             disabled={loading}
+                            minLength="3"
                         />
                     </div>
                     <div className="form-group">
@@ -88,6 +89,7 @@ function Signup() {
                             onChange={handleChange}
                             required
                             disabled={loading}
+                            minLength="6"
                         />
                     </div>
                     <div className="form-group">
@@ -110,7 +112,7 @@ function Signup() {
                     </button>
                 </form>
                 <p className="login-link">
-                    Already have an account? <span onClick={() => navigate('/login')}>Login here</span>
+                    Already have an account? <Link to="/login">Login here</Link>
                 </p>
             </div>
         </div>
