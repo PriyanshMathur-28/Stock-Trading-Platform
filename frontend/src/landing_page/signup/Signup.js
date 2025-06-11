@@ -56,6 +56,7 @@ function Signup() {
             <div className="signup-form">
                 <h2>Create Account</h2>
                 {error && <div className="error-message">{error}</div>}
+                }
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Username</label>
