@@ -36,7 +36,7 @@ export default function Login() {
       password: formData.get("password"),
     };
     axios
-      .post("https://zerodha-clone-backend-8nlf.onrender.com/user/login", data, {
+      .post("http://localhost:3000/user/login", data, {
         headers: {
           "Content-Type": "application/json",
         },
