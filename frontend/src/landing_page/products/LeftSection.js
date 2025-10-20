@@ -3,11 +3,7 @@ import React from "react";
 function LeftSection({ 
   imageUrl, 
   productName, 
-  productDescription, // Fixed: Typo in prop name
-  tryDemo, 
-  learnMore, 
-  googlePlay, 
-  appStore 
+  productDescription
 }) {
   return (
     <div className="container-fluid px-4 px-lg-5 py-5 bg-light">
@@ -45,7 +41,7 @@ function LeftSection({
             {/* Action Buttons */}
             <div className="d-flex flex-column flex-md-row g-3 mb-4 justify-content-center justify-content-md-start">
               <a 
-                href={tryDemo} 
+                href="https://zerodha.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn btn-outline-primary px-4 py-3 rounded-pill fs-6 text-decoration-none d-flex align-items-center"
@@ -56,7 +52,7 @@ function LeftSection({
                 <i className="fas fa-arrow-right ms-2"></i>
               </a>
               <a 
-                href={learnMore} 
+                href="https://zerodha.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn btn-primary px-4 py-3 rounded-pill fs-6 text-decoration-none d-flex align-items-center"
@@ -71,7 +67,7 @@ function LeftSection({
             {/* App Store Badges - Responsive */}
             <div className="d-flex justify-content-center justify-content-md-start g-3 flex-wrap">
               <a 
-                href={googlePlay} 
+                href="https://zerodha.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="d-inline-block"
@@ -87,7 +83,7 @@ function LeftSection({
                 />
               </a>
               <a 
-                href={appStore} 
+                href="https://zerodha.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="d-inline-block"

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 function Brokerage() {
   return (
@@ -22,13 +21,15 @@ function Brokerage() {
             <div className="card-body">
               {/* Calculator Link */}
               <div className="d-flex justify-content-center mb-4">
-                <Link 
-                  to="/calculator"
-                  className="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm"
+                <a
+                  href="http://localhost:3001/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm text-decoration-none"
                 >
                   <i className="fas fa-calculator me-2"></i>
                   Brokerage Calculator
-                </Link>
+                </a>
               </div>
 
               {/* Charges List - Accordion for Mobile */}
@@ -38,9 +39,9 @@ function Brokerage() {
                     <i className="fas fa-info-circle text-primary me-2"></i>
                     Additional Charges
                   </h3>
-                  
+
                   <div className="accordion" id="chargesAccordion">
-                    {/* Desktop: Full List | Mobile: Collapsible */}
+                    {/* Desktop List */}
                     <div className="accordion-item border-0 shadow-sm rounded-3 mb-3 d-none d-lg-block">
                       <div className="accordion-body p-4">
                         <ul className="list-unstyled ps-0">
@@ -73,83 +74,31 @@ function Brokerage() {
                     </div>
 
                     {/* Mobile Accordion Items */}
-                    <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2">
-                      <h2 className="accordion-header">
-                        <button className="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#callTrade">
-                          <i className="fas fa-phone me-2"></i>Call & Trade + RMS
-                        </button>
-                      </h2>
-                      <div id="callTrade" className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
-                        <div className="accordion-body">
-                          ₹50 + GST per order
+                    {[
+                      { id: "callTrade", icon: "fa-phone", title: "Call & Trade + RMS", desc: "₹50 + GST per order" },
+                      { id: "digitalNotes", icon: "fa-envelope", title: "Digital Contract Notes", desc: "Sent via e-mail (Free)" },
+                      { id: "physicalNotes", icon: "fa-file-invoice", title: "Physical Contract Notes", desc: "₹20 per note + Courier charges" },
+                      { id: "nriNonPis", icon: "fa-globe-asia", title: "NRI (non-PIS)", desc: "0.5% or ₹100 per equity order (lower)" },
+                      { id: "nriPis", icon: "fa-globe-asia", title: "NRI (PIS)", desc: "0.5% or ₹200 per equity order (lower)" },
+                      { id: "debitBalance", icon: "fa-exclamation-triangle", title: "Debit Balance Orders", desc: "₹40 per order (instead of ₹20)" },
+                    ].map((item) => (
+                      <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2" key={item.id}>
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button collapsed fw-bold"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#${item.id}`}
+                          >
+                            <i className={`fas ${item.icon} me-2`}></i>
+                            {item.title}
+                          </button>
+                        </h2>
+                        <div id={item.id} className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
+                          <div className="accordion-body">{item.desc}</div>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2">
-                      <h2 className="accordion-header">
-                        <button className="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#digitalNotes">
-                          <i className="fas fa-envelope me-2"></i>Digital Contract Notes
-                        </button>
-                      </h2>
-                      <div id="digitalNotes" className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
-                        <div className="accordion-body">
-                          Sent via e-mail (Free)
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2">
-                      <h2 className="accordion-header">
-                        <button className="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#physicalNotes">
-                          <i className="fas fa-file-invoice me-2"></i>Physical Contract Notes
-                        </button>
-                      </h2>
-                      <div id="physicalNotes" className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
-                        <div className="accordion-body">
-                          ₹20 per note + Courier charges
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2">
-                      <h2 className="accordion-header">
-                        <button className="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#nriNonPis">
-                          <i className="fas fa-globe-asia me-2"></i>NRI (non-PIS)
-                        </button>
-                      </h2>
-                      <div id="nriNonPis" className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
-                        <div className="accordion-body">
-                          0.5% or ₹100 per equity order (lower)
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2">
-                      <h2 className="accordion-header">
-                        <button className="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#nriPis">
-                          <i className="fas fa-globe-asia me-2"></i>NRI (PIS)
-                        </button>
-                      </h2>
-                      <div id="nriPis" className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
-                        <div className="accordion-body">
-                          0.5% or ₹200 per equity order (lower)
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="accordion-item border-0 shadow-sm rounded-3 d-lg-none mb-2">
-                      <h2 className="accordion-header">
-                        <button className="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#debitBalance">
-                          <i className="fas fa-exclamation-triangle me-2"></i>Debit Balance Orders
-                        </button>
-                      </h2>
-                      <div id="debitBalance" className="accordion-collapse collapse" data-bs-parent="#chargesAccordion">
-                        <div className="accordion-body">
-                          ₹40 per order (instead of ₹20)
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -165,13 +114,15 @@ function Brokerage() {
                 <i className="fas fa-list me-2"></i>
                 Full List of Charges
               </h3>
-              <Link 
-                to="/charges"
-                className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6"
+              <a
+                href="http://localhost:3001/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6 text-decoration-none"
               >
                 <i className="fas fa-download me-2"></i>
                 Download PDF
-              </Link>
+              </a>
             </div>
           </div>
         </div>

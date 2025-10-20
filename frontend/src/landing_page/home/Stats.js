@@ -87,14 +87,14 @@ function Stats() {
             <div className="row justify-content-center g-3">
               <div className="col-12 col-md-5">
                 <Link 
-                  to="/products"
+                  to="http://localhost:3002/product"
                   className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6"
                 >
                   <i className="fas fa-rocket me-2"></i>
                   Explore our products
                 </Link>
               </div>
-              <div className="col-12 col-md-5">
+              {/* <div className="col-12 col-md-5">
                 <Link 
                   to="/demo"
                   className="btn btn-primary w-100 py-3 rounded-pill fs-6"
@@ -102,7 +102,7 @@ function Stats() {
                   <i className="fas fa-play-circle me-2"></i>
                   Try Kite Demo
                 </Link>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

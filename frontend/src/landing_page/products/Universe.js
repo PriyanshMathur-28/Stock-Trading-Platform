@@ -166,7 +166,7 @@ function Universe() {
       {/* CTA Button - Responsive */}
       <div className="row justify-content-center">
         <div className="col-12 col-lg-6">
-          <Link to="/register">
+          <Link to="http://localhost:3001/login">
             <button 
               className="btn btn-primary btn-lg w-100 py-4 rounded-pill fs-5 shadow-lg"
               style={{ fontWeight: "600" }}

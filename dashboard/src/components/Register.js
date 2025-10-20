@@ -44,7 +44,7 @@ export default function Register() {
     }
 
     axios
-      .post("http://localhost:3000/user/register", data, {
+      .post("http://localhost:3001/user/register", data, {
         headers: {
           "Content-Type": "application/json",
         },

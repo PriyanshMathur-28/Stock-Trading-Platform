@@ -65,7 +65,7 @@ function Navbar() {
             <li className="nav-item">
               <Link 
                 className="nav-link btn btn-outline-primary px-3" 
-                to="/register"
+                to="http://localhost:3001/login"
                 style={{ 
                   borderRadius: "25px",
                   fontWeight: "500"

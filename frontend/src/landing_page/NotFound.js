@@ -8,7 +8,7 @@ function NotFound() {
         {/* Image Column - Stacks on Mobile */}
         <div className="col-12 col-lg-6 text-center order-lg-2">
           <div className="p-3">
-            <img 
+            {/* <img 
               src="/media/images/404-kiaan.jpg" 
               alt="Kiaan looking confused - Page Not Found" 
               className="img-fluid rounded-4 shadow-lg" 
@@ -17,7 +17,7 @@ function NotFound() {
                 maxHeight: "clamp(250px, 50vh, 400px)",
                 objectFit: "contain"
               }} 
-            />
+            /> */}
           </div>
         </div>
 
@@ -29,14 +29,19 @@ function NotFound() {
               404
             </div>
             
-            {/* Main Title */}
-            <h1 className="display-3 fs-1 fs-md-2 fw-bold text-dark mb-3 lh-lg">
-              Kiaan couldn’t find that page
+            {/* Main Title - Fixed: Removed conflicting display-3, used clamp for responsive sizing */}
+            <h1 
+              className="fw-bold text-dark mb-3 lh-lg" 
+              style={{ 
+                fontSize: "clamp(2rem, 8vw, 4rem)" 
+              }}
+            >
+              We couldn't find that page
             </h1>
             
             {/* Description */}
             <p className="text-muted fs-4 fs-md-5 lh-lg mb-4" style={{ fontSize: "clamp(1em, 2.5vw, 1.25em)" }}>
-              We couldn’t find the page you were looking for. 
+              We couldn't find the page you were looking for. 
               <br className="d-lg-none" />
               Don't worry—let's get you back on track!
             </p>
@@ -48,7 +53,7 @@ function NotFound() {
               style={{ fontWeight: "600" }}
             >
               <i className="fas fa-home me-2"></i>
-              Visit Bullzaar’s Home Page
+              Visit Bullzaar's Home Page
             </Link>
           </div>
         </div>

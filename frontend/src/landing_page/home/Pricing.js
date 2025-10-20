@@ -43,7 +43,7 @@ function Pricing() {
                   <strong>Direct Mutual Funds</strong>
                 </li>
               </ul>
-              <Link to="/register" className="btn btn-success w-100 py-3 rounded-pill">
+              <Link to="http://localhost:3001/login" className="btn btn-success w-100 py-3 rounded-pill">
                 <i className="fas fa-user-plus me-2"></i>
                 Get Started Free
               </Link>
@@ -71,7 +71,7 @@ function Pricing() {
                   <strong>Futures & Options</strong>
                 </li>
               </ul>
-              <Link to="/register" className="btn btn-primary w-100 py-3 rounded-pill">
+              <Link to="http://localhost:3001/login" className="btn btn-primary w-100 py-3 rounded-pill">
                 <i className="fas fa-bolt me-2"></i>
                 Start Trading
               </Link>

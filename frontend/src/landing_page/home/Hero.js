@@ -35,7 +35,7 @@ function Hero() {
             </p>
             
             {/* CTA Button */}
-            <Link to="/register">
+            <Link to="http://localhost:3001/login">
               <button 
                 className="btn btn-primary btn-lg px-5 py-3 fs-5 shadow-lg"
                 style={{ 
