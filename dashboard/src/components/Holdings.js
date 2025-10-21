@@ -7,18 +7,21 @@ import { useAuth } from "../hooks/useAuth";
 const Holdings = () => {
   const [allHoldings, SetAllHoldings] = useState([]);
   let { user } = useAuth();
+useEffect(() => {
+  axios
+    .get("http://localhost:3001/holdings/index", {
+      headers: {
+        Authorization: `Bearer ${user}`,  // Add Bearer prefix
+      },
+    })
+    .then((res) => {
+      SetAllHoldings(res.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching holdings:", error);
+    });
+}, [user]);  // Add user as dependency
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/holdings/index", {
-        headers: {
-          Authorization: user,
-        },
-      })
-      .then((res) => {
-        SetAllHoldings(res.data);
-      });
-  }, []);
 
   const labels = allHoldings.map((subArray) => subArray["name"]);
 

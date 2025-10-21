@@ -8,18 +8,20 @@ const Orders = () => {
   const [allOrders, SetAllOrders] = useState([]);
   let { user } = useAuth();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/orders/index", {
-        headers: {
-          Authorization: user,
-        },
-      })
-      .then((res) => {
-        SetAllOrders(res.data);
-      });
-  }, [allOrders]);
-
+useEffect(() => {
+  axios
+    .get("http://localhost:3001/orders/index", {
+      headers: {
+        Authorization: user,
+      },
+    })
+    .then((res) => {
+      SetAllOrders(res.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching orders:", error);
+    });
+}, []); // Remove allOrders from dependencies
   return (
     <>
       <h3 className="title">Orders ({allOrders.length})</h3>

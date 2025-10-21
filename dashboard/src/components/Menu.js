@@ -61,13 +61,7 @@ const Menu = () => {
           <p className="username">USERID</p>
         </div>
       </div>
-      {isProfileDropdownOpen ? (
-        <div>
-          <ul>
-            <li onClick={logout()}>Log Out</li>
-          </ul>
-        </div>
-      ) : null}
+ 
     </div>
   );
 };

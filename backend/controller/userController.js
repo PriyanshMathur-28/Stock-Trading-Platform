@@ -2,7 +2,7 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const { UserModel } = require("../model/UserModel");
+const { UserModel } = require("../model/UserModel"); // ✅ Changed to "model"
 
 module.exports.register = async (req, res) => {
   try {
@@ -18,12 +18,18 @@ module.exports.register = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+      orders: [],
     });
     await newUser.save();
 
-    const token = jwt.sign({ email: newUser.email }, process.env.secret);
+    const token = jwt.sign(
+      { email: newUser.email, userId: newUser._id }, 
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
     res.status(200).json({ token });
   } catch (error) {
+    console.error("Registration error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -40,9 +46,14 @@ module.exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ email: user.email }, process.env.secret);
+    const token = jwt.sign(
+      { email: user.email, userId: user._id }, 
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
     res.status(200).json({ token });
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

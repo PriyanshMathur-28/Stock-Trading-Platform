@@ -10,7 +10,7 @@ const Positions = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/positions/index", {
+      .get("http://localhost:3001/positions/index", {
         headers: {
           Authorization: user,
         },

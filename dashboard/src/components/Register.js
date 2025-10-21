@@ -29,39 +29,43 @@ export default function Register() {
     }
   }, []);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
 
-    const data = {
-      username: formData.get("Username"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-
-    if (!data.username || !data.email || !data.password) {
-      setAlert({ st: true, msg: "Enter Valid Details" });
-    }
-
-    axios
-      .post("http://localhost:3001/user/register", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(async (res) => {
-        await login(res.data.token);
-      })
-      .catch((error) => {
-        if (error.response) {
-          setAlert({ st: true, msg: error.response.data.error });
-        } else if (error.request) {
-          setAlert({ st: true, msg: "Network Error" });
-        } else {
-          setAlert({ st: true, msg: "Something Went Wrong" });
-        }
-      });
+  const data = {
+    username: formData.get("Username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
   };
+
+  if (!data.username || !data.email || !data.password) {
+    setAlert({ st: true, msg: "Enter Valid Details" });
+    return;
+  }
+
+  try {
+    const res = await axios.post("http://localhost:3000/user/register", data, {
+      headers: { "Content-Type": "application/json" },
+      // withCredentials: true // uncomment if backend uses cookies
+    });
+    if (res.data.token) {
+      await login(res.data.token);
+      navigate("/"); // Redirect after login
+    } else {
+      setAlert({ st: true, msg: "No token returned" });
+    }
+  } catch (error) {
+    if (error.response) {
+      setAlert({ st: true, msg: error.response.data.error || "Server Error" });
+    } else if (error.request) {
+      setAlert({ st: true, msg: "Network Error" });
+    } else {
+      setAlert({ st: true, msg: "Something Went Wrong" });
+    }
+  }
+};
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

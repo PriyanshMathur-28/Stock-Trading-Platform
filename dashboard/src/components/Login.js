@@ -1,21 +1,8 @@
 import * as React from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Alert from "@mui/material/Alert";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 import { useAuth } from "../hooks/useAuth";
-
-const defaultTheme = createTheme();
+import "./Login.css";
 
 export default function Login() {
   let [alert, setAlert] = React.useState({ st: false, msg: "" });
@@ -56,38 +43,67 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            {alert.st == true ? <Alert severity="error">{alert.msg}</Alert> : null}
-            <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus />
-            <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link to="/register">{"Don't have an account? Sign Up"}</Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <div className="icon-wrapper">
+            <svg className="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" strokeWidth="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" strokeWidth="2"/>
+            </svg>
+          </div>
+          <h1 className="login-title">Welcome Back</h1>
+          <p className="login-subtitle">Please sign in to your account</p>
+        </div>
+
+        <form className="login-form" onSubmit={handleSubmit} noValidate>
+          {alert.st && (
+            <div className="alert-error">
+              <svg className="alert-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+              </svg>
+              <span>{alert.msg}</span>
+            </div>
+          )}
+
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="form-input"
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="form-input"
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+            />
+          </div>
+
+          <button type="submit" className="btn-submit">
+            Sign In
+          </button>
+
+          <div className="login-footer">
+            <p className="signup-text">
+              Don't have an account? <Link to="/register" className="signup-link">Sign Up</Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

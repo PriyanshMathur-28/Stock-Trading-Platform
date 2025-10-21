@@ -1,26 +1,34 @@
 import { BarChartOutlined, MoreHoriz } from "@mui/icons-material";
 import { Grow, Tooltip } from "@mui/material";
 import React, { useContext } from "react";
-
 import GeneralContext from "./GeneralContext";
 
 function WatchListAction({ uid }) {
-  const generalContext = useContext(GeneralContext);
+  const { openBuyWindow } = useContext(GeneralContext); // Destructure context
 
   const handleBuyClick = () => {
-    generalContext.openBuyWindow(uid);
+    openBuyWindow(uid);
+  };
+
+  const handleSellClick = () => {
+    // Assuming a similar context method or direct API call
+    openBuyWindow(uid, "SELL"); // Pass mode if context supports it
   };
 
   return (
     <span className="actions">
       <span>
-        <Tooltip title="Buy (B)" placement="top" arrow TransitionComponent={Grow} onClick={handleBuyClick}>
-          <button className="buy">Buy</button>
+        <Tooltip title="Buy (B)" placement="top" arrow TransitionComponent={Grow}>
+          <button className="buy" onClick={handleBuyClick}>
+            Buy
+          </button>
         </Tooltip>
       </span>
       <span>
         <Tooltip title="Sell (S)" placement="top" arrow TransitionComponent={Grow}>
-          <button className="sell">Sell</button>
+          <button className="sell" onClick={handleSellClick}>
+            Sell
+          </button>
         </Tooltip>
       </span>
       <span>

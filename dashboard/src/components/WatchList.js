@@ -1,11 +1,30 @@
-import React, { useState } from "react";
-
-import { watchlist } from "../data/data";
-import WacthListItem from "./WatchListItem";
+import React, { useState, useEffect } from "react"; // Add useEffect
+import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import WatchListItem from "./WatchListItem";
 import { DoughnutChart } from "./DoughnutChart";
 
 const WatchList = () => {
-  const labels = watchlist.map((subArray) => subArray["name"]);
+  const [watchlist, setWatchlist] = useState([]);
+  const { user } = useAuth();
+
+useEffect(() => {
+  axios
+    .get("http://localhost:3001/watchlist/index", {
+      headers: {
+        Authorization: `Bearer ${user}`,  // Add Bearer prefix
+      },
+    })
+    .then((res) => {
+      setWatchlist(res.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching watchlist:", error);
+    });
+}, [user]);  // Add user as dependency
+
+
+  const labels = watchlist.map((subArray) => subArray.name);
   const data = {
     labels,
     datasets: [
@@ -18,6 +37,7 @@ const WatchList = () => {
       },
     ],
   };
+
   return (
     <div className="watchlist-container">
       <div className="search-container">
@@ -26,9 +46,9 @@ const WatchList = () => {
       </div>
 
       <ul className="list">
-        {watchlist.map((stock, index) => {
-          return <WacthListItem stock={stock} key={index} />;
-        })}
+        {watchlist.map((stock, index) => (
+          <WatchListItem stock={stock} key={index} />
+        ))}
       </ul>
 
       <DoughnutChart data={data} />
