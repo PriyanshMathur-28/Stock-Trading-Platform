@@ -114,6 +114,15 @@ export default function AuthForm() {
             {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
           </button>
         </div>
+
+        <div className="mt-4 text-center">
+          <a 
+            href="https://stock-trading-platform-6hm4.vercel.app/" 
+            className="text-sm text-slate-500 hover:text-slate-700 transition inline-flex items-center gap-1"
+          >
+            ← Back to Home
+          </a>
+        </div>
       </div>
     </div>
   );
