@@ -368,7 +368,7 @@ function CreateTicket() {
       {/* Final CTA - Responsive */}
       <div className="row justify-content-center mt-5">
         <div className="col-12 col-lg-6">
-          <Link to="http://localhost:3001/login" className="btn btn-primary btn-lg w-100 py-3 rounded-pill fs-5 shadow-lg d-flex align-items-center justify-content-center">
+          <Link to="https://stock-trading-platform-three.vercel.app/" className="btn btn-primary btn-lg w-100 py-3 rounded-pill fs-5 shadow-lg d-flex align-items-center justify-content-center">
             <i className="fas fa-ticket-alt me-2"></i>
             Can't Find What You Need? Contact Us
           </Link>

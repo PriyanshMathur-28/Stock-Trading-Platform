@@ -18,9 +18,7 @@ export function HoldingsList({ holdings, holdingPrices, userId, onTradeComplete 
   if (holdings.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-2">
-          <TrendingUp className="w-12 h-12 mx-auto" />
-        </div>
+         <img src="logo.jpg" style={{height:"40px"}}></img>
         <h3 className="text-lg font-semibold text-gray-900 mb-1">No Holdings Yet</h3>
         <p className="text-gray-600">Start trading to build your portfolio</p>
       </div>
@@ -64,9 +62,9 @@ export function HoldingsList({ holdings, holdingPrices, userId, onTradeComplete 
                       currentPrice.change >= 0 ? 'text-green-600' : 'text-red-600'
                     }`}>
                       {currentPrice.change >= 0 ? (
-                        <TrendingUp className="w-4 h-4" />
+                        <img src="logo.jpg" style={{height:"40px"}}></img>
                       ) : (
-                        <TrendingDown className="w-4 h-4" />
+                        <img src="logo.jpg" style={{height:"40px"}}></img>
                       )}
                       <span className="font-medium">
                         {currentPrice.change >= 0 ? '+' : ''}

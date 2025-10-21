@@ -65,7 +65,7 @@ function Navbar() {
             <li className="nav-item">
               <Link 
                 className="nav-link btn btn-outline-primary px-3" 
-                to="http://localhost:3001/login"
+                to="https://stock-trading-platform-three.vercel.app/"
                 style={{ 
                   borderRadius: "25px",
                   fontWeight: "500"

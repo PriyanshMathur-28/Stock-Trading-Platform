@@ -22,7 +22,7 @@ function Brokerage() {
               {/* Calculator Link */}
               <div className="d-flex justify-content-center mb-4">
                 <a
-                  href="http://localhost:3001/login"
+                  href="https://stock-trading-platform-three.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm text-decoration-none"
@@ -115,7 +115,7 @@ function Brokerage() {
                 Full List of Charges
               </h3>
               <a
-                href="http://localhost:3001/login"
+                href="https://stock-trading-platform-three.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6 text-decoration-none"

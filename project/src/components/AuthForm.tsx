@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { TrendingUp } from 'lucide-react';
+// import { TrendingUp } from 'lucide-react';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,9 +33,7 @@ export default function AuthForm() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <div className="flex items-center justify-center mb-8">
-          <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-3 rounded-xl">
-            <TrendingUp className="w-8 h-8 text-white" />
-          </div>
+           <img src="logo.jpg" style={{height:"40px"}}></img>
         </div>
 
         <h1 className="text-3xl font-bold text-center text-slate-800 mb-2">

@@ -46,7 +46,7 @@ function Hero() {
                 <strong>₹0 brokerage</strong>.
               </p>
               <a
-                href="http://localhost:3001/login"
+                href="https://stock-trading-platform-three.vercel.app/"
                 className="btn btn-success w-100 py-3 rounded-pill mt-3 fs-6"
               >
                 <i className="fas fa-arrow-right me-2"></i>
@@ -85,7 +85,7 @@ function Hero() {
                 currency, and commodity. <strong>₹20 flat</strong> on all options.
               </p>
               <a
-                href="http://localhost:3001/login"
+                href="https://stock-trading-platform-three.vercel.app/"
                 className="btn btn-primary w-100 py-3 rounded-pill mt-3 fs-6"
               >
                 <i className="fas fa-bolt me-2"></i>
@@ -121,7 +121,7 @@ function Hero() {
                 <strong>₹0 commissions & DP charges</strong>.
               </p>
               <a
-                href="http://localhost:3001/login"
+                href="https://stock-trading-platform-three.vercel.app/"
                 className="btn btn-success w-100 py-3 rounded-pill mt-3 fs-6"
               >
                 <i className="fas fa-arrow-right me-2"></i>
@@ -136,7 +136,7 @@ function Hero() {
       <div className="row justify-content-center mt-5">
         <div className="col-12 col-lg-8 text-center">
           <a
-            href="http://localhost:3001/login"
+            href="https://stock-trading-platform-three.vercel.app/"
             className="btn btn-primary btn-lg px-5 py-3 fs-4 shadow-lg"
             style={{ borderRadius: "50px" }}
           >

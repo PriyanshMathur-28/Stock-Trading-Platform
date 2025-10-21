@@ -35,7 +35,7 @@ function Hero() {
             </p>
             
             {/* CTA Button */}
-            <Link to="http://localhost:3001/login">
+            <Link to="https://stock-trading-platform-three.vercel.app/">
               <button 
                 className="btn btn-primary btn-lg px-5 py-3 fs-5 shadow-lg"
                 style={{ 

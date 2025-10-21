@@ -78,9 +78,7 @@ export default function FundsPage() {
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="bg-slate-100 p-3 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-slate-600" />
-            </div>
+             <img src="logo.jpg" style={{height:"40px"}}></img>
             <div className="text-sm font-medium text-slate-600">Used Margin</div>
           </div>
           <div className="text-3xl font-bold text-slate-800">₹{funds.used_margin.toFixed(2)}</div>

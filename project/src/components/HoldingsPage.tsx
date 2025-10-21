@@ -109,9 +109,7 @@ export default function HoldingsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           {holdings.length === 0 ? (
             <div className="p-12 text-center">
-              <div className="text-slate-400 mb-4">
-                <TrendingUp className="w-16 h-16 mx-auto" />
-              </div>
+              <img src="logo.jpg" style={{height:"40px"}}></img>
               <h3 className="text-lg font-semibold text-slate-800 mb-2">No Holdings Yet</h3>
               <p className="text-slate-500 mb-6">Start building your portfolio by adding your first stock</p>
               <button
