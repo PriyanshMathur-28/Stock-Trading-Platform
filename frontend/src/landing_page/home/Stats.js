@@ -87,7 +87,7 @@ function Stats() {
             <div className="row justify-content-center g-3">
               <div className="col-12 col-md-5">
                 <Link 
-                  to="http://localhost:3002/product"
+                  to="https://stock-trading-platform-three.vercel.app/"
                   className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6"
                 >
                   <i className="fas fa-rocket me-2"></i>

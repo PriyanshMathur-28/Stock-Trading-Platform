@@ -133,7 +133,7 @@ function Hero() {
       </div>
 
       {/* Final CTA */}
-      <div className="row justify-content-center mt-5">
+      {/* <div className="row justify-content-center mt-5">
         <div className="col-12 col-lg-8 text-center">
           <a
             href="https://stock-trading-platform-three.vercel.app/"
@@ -143,8 +143,8 @@ function Hero() {
             <i className="fas fa-user-plus me-2"></i>
             Sign Up Now - It's Free!
           </a>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   );
 }

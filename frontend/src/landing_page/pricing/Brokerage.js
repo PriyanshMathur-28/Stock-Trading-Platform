@@ -1,6 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
+import { jsPDF } from "jspdf";
 
 function Brokerage() {
+  const [tradeType, setTradeType] = useState("equity");
+  const [amount, setAmount] = useState("");
+  const [orderType, setOrderType] = useState("regular");
+  const [isNRI, setIsNRI] = useState(false);
+  const [isPIS, setIsPIS] = useState(false);
+  const [isDebitBalance, setIsDebitBalance] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const calculateBrokerage = () => {
+    let brokerage = 0;
+    const amountValue = parseFloat(amount) || 0;
+
+    if (tradeType === "equity") {
+      if (isNRI && !isPIS) {
+        brokerage = Math.min(amountValue * 0.005, 100);
+      } else if (isNRI && isPIS) {
+        brokerage = Math.min(amountValue * 0.005, 200);
+      } else {
+        brokerage = isDebitBalance ? 40 : 20;
+      }
+    }
+
+    if (orderType === "callTrade") {
+      brokerage += 50 * 1.18; // Including 18% GST
+    }
+
+    setResult({
+      baseBrokerage: isNRI ? brokerage : isDebitBalance ? 40 : 20,
+      callTrade: orderType === "callTrade" ? 50 * 1.18 : 0,
+      total: brokerage,
+    });
+  };
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Brokerage Calculation Report", 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Trade Type: ${tradeType.charAt(0).toUpperCase() + tradeType.slice(1)}`, 20, 40);
+    doc.text(`Amount: ₹${amount || 0}`, 20, 50);
+    doc.text(`Order Type: ${orderType === "callTrade" ? "Call & Trade" : "Regular"}`, 20, 60);
+    doc.text(`NRI: ${isNRI ? (isPIS ? "PIS" : "Non-PIS") : "No"}`, 20, 70);
+    doc.text(`Debit Balance: ${isDebitBalance ? "Yes" : "No"}`, 20, 80);
+    if (result) {
+      doc.text("Calculation Results:", 20, 100);
+      doc.text(`Base Brokerage: ₹${result.baseBrokerage.toFixed(2)}`, 20, 110);
+      doc.text(`Call & Trade (with GST): ₹${result.callTrade.toFixed(2)}`, 20, 120);
+      doc.text(`Total Brokerage: ₹${result.total.toFixed(2)}`, 20, 130);
+    }
+    doc.text("Additional Charges:", 20, 150);
+    doc.text("Digital Contract Notes: Free", 20, 160);
+    doc.text("Physical Contract Notes: ₹20 per note + Courier", 20, 170);
+    doc.save("Brokerage_Report.pdf");
+  };
+
   return (
     <div className="container-fluid px-4 px-lg-5 py-5 bg-light">
       {/* Section Header */}
@@ -15,21 +71,99 @@ function Brokerage() {
 
       {/* Main Content Row - Responsive Grid */}
       <div className="row g-4 g-lg-5 justify-content-center">
-        {/* Calculator Column - Stacks on Mobile */}
+        {/* Calculator Column */}
         <div className="col-12 col-lg-8">
           <div className="card border-0 shadow-lg rounded-4 p-4 p-lg-5 h-100 bg-white">
             <div className="card-body">
-              {/* Calculator Link */}
-              <div className="d-flex justify-content-center mb-4">
-                <a
-                  href="https://stock-trading-platform-three.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm text-decoration-none"
-                >
-                  <i className="fas fa-calculator me-2"></i>
+              {/* Calculator Form */}
+              <div className="mb-4">
+                <h3 className="fs-4 fw-bold text-dark mb-4 text-center">
+                  <i className="fas fa-calculator text-primary me-2"></i>
                   Brokerage Calculator
-                </a>
+                </h3>
+                <div className="row g-3">
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-bold">Trade Type</label>
+                    <select
+                      className="form-select rounded-pill"
+                      value={tradeType}
+                      onChange={(e) => setTradeType(e.target.value)}
+                    >
+                      <option value="equity">Equity</option>
+                    </select>
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-bold">Trade Amount (₹)</label>
+                    <input
+                      type="number"
+                      className="form-control rounded-pill"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="Enter amount"
+                    />
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-bold">Order Type</label>
+                    <select
+                      className="form-select rounded-pill"
+                      value={orderType}
+                      onChange={(e) => setOrderType(e.target.value)}
+                    >
+                      <option value="regular">Regular</option>
+                      <option value="callTrade">Call & Trade</option>
+                    </select>
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-bold">NRI Status</label>
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={isNRI}
+                        onChange={(e) => setIsNRI(e.target.checked)}
+                      />
+                      <label className="form-check-label">Is NRI?</label>
+                    </div>
+                    {isNRI && (
+                      <div className="form-check mt-2">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          checked={isPIS}
+                          onChange={(e) => setIsPIS(e.target.checked)}
+                        />
+                        <label className="form-check-label">PIS Account</label>
+                      </div>
+                    )}
+                  </div>
+                  <div className="col-12">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={isDebitBalance}
+                        onChange={(e) => setIsDebitBalance(e.target.checked)}
+                      />
+                      <label className="form-check-label">Debit Balance Order</label>
+                    </div>
+                  </div>
+                  <div className="col-12 text-center">
+                    <button
+                      className="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm"
+                      onClick={calculateBrokerage}
+                    >
+                      Calculate
+                    </button>
+                  </div>
+                </div>
+                {result && (
+                  <div className="mt-4 p-3 bg-light rounded-3 text-center">
+                    <h4 className="fs-5 fw-bold">Calculation Results</h4>
+                    <p>Base Brokerage: ₹{result.baseBrokerage.toFixed(2)}</p>
+                    <p>Call & Trade (with GST): ₹{result.callTrade.toFixed(2)}</p>
+                    <p className="fw-bold">Total Brokerage: ₹{result.total.toFixed(2)}</p>
+                  </div>
+                )}
               </div>
 
               {/* Charges List - Accordion for Mobile */}
@@ -114,15 +248,13 @@ function Brokerage() {
                 <i className="fas fa-list me-2"></i>
                 Full List of Charges
               </h3>
-              <a
-                href="https://stock-trading-platform-three.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6 text-decoration-none"
+              <button
+                className="btn btn-outline-primary w-100 py-3 rounded-pill fs-6"
+                onClick={downloadPDF}
               >
                 <i className="fas fa-download me-2"></i>
                 Download PDF
-              </a>
+              </button>
             </div>
           </div>
         </div>
